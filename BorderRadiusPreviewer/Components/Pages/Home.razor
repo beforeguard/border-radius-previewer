@@ -2,4 +2,8 @@
 
 <PageTitle>Home</PageTitle>
 
-<div id="rcorners"></div>
+<div style="@_rcornersStyle" id="rcorners"></div>
+
+@code {
+    private readonly string _rcornersStyle = "border-radius: 25px; background: #FF7C0A; padding: 20px; width: 200px; height: 150px;";
+}
