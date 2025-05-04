@@ -1,9 +1,49 @@
 ﻿@page "/"
+@using MudBlazor
 
 <PageTitle>Home</PageTitle>
 
-<div style="@_rcornersStyle" id="rcorners"></div>
+<div style="@_boxStyle" id="box"></div>
+
+<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderTopLeftRadiusKey, $"{s}px")) Label="Top Left Radius" Variant="Variant.Text" Min="0" />
+<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderTopRightRadiusKey, $"{s}px")) Label="Top Right Radius" Variant="Variant.Text" Min="0" />
+<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderBottomLeftRadiusKey, $"{s}px")) Label="Bottom Left Radius" Variant="Variant.Text" Min="0" />
+<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderBottomRightRadiusKey, $"{s}px")) Label="Bottom Right Radius" Variant="Variant.Text" Min="0" />
 
 @code {
-    private readonly string _rcornersStyle = "border-radius: 25px; background: #FF7C0A; padding: 20px; width: 200px; height: 150px;";
+    private const string BorderTopLeftRadiusKey = "border-top-left-radius";
+    private const string BorderTopRightRadiusKey = "border-top-right-radius";
+    private const string BorderBottomLeftRadiusKey = "border-bottom-left-radius";
+    private const string BorderBottomRightRadiusKey = "border-bottom-right-radius";
+
+    private Dictionary<string, string> _cssStyles = new()
+        {
+            ["background"] = "#FF7C0A",
+            ["padding"] = "20px",
+            ["width"] = "200px",
+            ["height"] = "150px",
+            [BorderTopLeftRadiusKey] = "25px",
+            [BorderTopRightRadiusKey] = "25px",
+            [BorderBottomLeftRadiusKey] = "25px",
+            [BorderBottomRightRadiusKey] = "25px",
+        };
+    private string _boxStyle;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        UpdateStyle();
+    }
+
+    private void SetCssValue(string key, string value)
+    {
+        _cssStyles[key] = value;
+        UpdateStyle();
+    }
+
+    private void UpdateStyle()
+    {
+        _boxStyle = String.Join(";", _cssStyles.Select(kv => $"{kv.Key}:{kv.Value}"));
+        StateHasChanged();
+    }
 }
