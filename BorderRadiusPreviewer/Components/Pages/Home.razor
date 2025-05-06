@@ -1,5 +1,8 @@
 ﻿@page "/"
+@using BorderRadiusPreviewer.Services
 @using MudBlazor
+
+@inject ClipboardService ClipboardService
 
 <PageTitle>Home</PageTitle>
 
@@ -10,7 +13,10 @@
 <MudNumericField ValueChanged=@((int s) => SetCssValue(BorderBottomLeftRadiusKey, $"{s}px")) Label="Bottom Left Radius" Variant="Variant.Text" Min="0" />
 <MudNumericField ValueChanged=@((int s) => SetCssValue(BorderBottomRightRadiusKey, $"{s}px")) Label="Bottom Right Radius" Variant="Variant.Text" Min="0" />
 
+<MudButton OnClick="async () => await ClipboardService.WriteTextAsync(_boxStyle)" Color="Color.Primary" Variant="Variant.Outlined">Copy CSS</MudButton>
+
 @code {
+    private const int DefaultBorderRadius = 0;
     private const string BorderTopLeftRadiusKey = "border-top-left-radius";
     private const string BorderTopRightRadiusKey = "border-top-right-radius";
     private const string BorderBottomLeftRadiusKey = "border-bottom-left-radius";
@@ -22,10 +28,10 @@
             ["padding"] = "20px",
             ["width"] = "200px",
             ["height"] = "150px",
-            [BorderTopLeftRadiusKey] = "25px",
-            [BorderTopRightRadiusKey] = "25px",
-            [BorderBottomLeftRadiusKey] = "25px",
-            [BorderBottomRightRadiusKey] = "25px",
+            [BorderTopLeftRadiusKey] = $"{DefaultBorderRadius}px",
+            [BorderTopRightRadiusKey] = $"{DefaultBorderRadius}px",
+            [BorderBottomLeftRadiusKey] = $"{DefaultBorderRadius}px",
+            [BorderBottomRightRadiusKey] = $"{DefaultBorderRadius}px",
         };
     private string _boxStyle;
 
