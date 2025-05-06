@@ -6,50 +6,156 @@
 
 <PageTitle>Home</PageTitle>
 
-<div style="@_boxStyle" id="box"></div>
+<div style="@_shapeStyle" id="shape"></div>
 
-<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderTopLeftRadiusKey, $"{s}px")) Label="Top Left Radius" Variant="Variant.Text" Min="0" />
-<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderTopRightRadiusKey, $"{s}px")) Label="Top Right Radius" Variant="Variant.Text" Min="0" />
-<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderBottomLeftRadiusKey, $"{s}px")) Label="Bottom Left Radius" Variant="Variant.Text" Min="0" />
-<MudNumericField ValueChanged=@((int s) => SetCssValue(BorderBottomRightRadiusKey, $"{s}px")) Label="Bottom Right Radius" Variant="Variant.Text" Min="0" />
+<MudSlider Min="0" Max="100" @bind-Value="TopLeftRadiusX" Color="Color.Primary">Value: @TopLeftRadiusX</MudSlider>
+<MudSlider Min="0" Max="100" @bind-Value="TopRightRadiusX" Color="Color.Primary">Value: @TopRightRadiusX</MudSlider>
+<MudSlider Min="0" Max="100" @bind-Value="TopLeftRadiusY" Color="Color.Primary">Value: @TopLeftRadiusY</MudSlider>
+<MudSlider Min="0" Max="100" @bind-Value="BottomLeftRadiusY" Color="Color.Primary">Value: @BottomLeftRadiusY</MudSlider>
 
-<MudButton OnClick="async () => await ClipboardService.WriteTextAsync(_boxStyle)" Color="Color.Primary" Variant="Variant.Outlined">Copy CSS</MudButton>
+<MudSlider Min="0" Max="100" @bind-Value="TopRightRadiusY" Color="Color.Primary">Value: @TopRightRadiusY</MudSlider>
+<MudSlider Min="0" Max="100" @bind-Value="BottomRightRadiusY" Color="Color.Primary">Value: @BottomRightRadiusY</MudSlider>
+<MudSlider Min="0" Max="100" @bind-Value="BottomLeftRadiusX" Color="Color.Primary">Value: @BottomLeftRadiusX</MudSlider>
+<MudSlider Min="0" Max="100" @bind-Value="BottomRightRadiusX" Color="Color.Primary">Value: @BottomRightRadiusX</MudSlider>
+
+<MudButton OnClick="async () => await ClipboardService.WriteTextAsync(_shapeStyle)" Color="Color.Primary" Variant="Variant.Outlined">Copy CSS</MudButton>
 
 @code {
-    private const int DefaultBorderRadius = 0;
-    private const string BorderTopLeftRadiusKey = "border-top-left-radius";
-    private const string BorderTopRightRadiusKey = "border-top-right-radius";
-    private const string BorderBottomLeftRadiusKey = "border-bottom-left-radius";
-    private const string BorderBottomRightRadiusKey = "border-bottom-right-radius";
-
     private Dictionary<string, string> _cssStyles = new()
         {
             ["background"] = "#FF7C0A",
             ["padding"] = "20px",
             ["width"] = "200px",
             ["height"] = "150px",
-            [BorderTopLeftRadiusKey] = $"{DefaultBorderRadius}px",
-            [BorderTopRightRadiusKey] = $"{DefaultBorderRadius}px",
-            [BorderBottomLeftRadiusKey] = $"{DefaultBorderRadius}px",
-            [BorderBottomRightRadiusKey] = $"{DefaultBorderRadius}px",
+            ["border-radius"] = "",
         };
-    private string _boxStyle;
+
+    private string _shapeStyle;
+    private int _topLeftRadiusX;
+    private int _topLeftRadiusY;
+    private int _topRightRadiusX;
+    private int _topRightRadiusY;
+    private int _bottomLeftRadiusX;
+    private int _bottomLeftRadiusY;
+    private int _bottomRightRadiusX;
+    private int _bottomRightRadiusY;
+
+    private int TopLeftRadiusX
+    {
+        get => _topLeftRadiusX;
+        set
+        {
+            if (_topLeftRadiusX != value)
+            {
+                _topLeftRadiusX = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
+
+    private int TopLeftRadiusY
+    {
+        get => _topLeftRadiusY;
+        set
+        {
+            if (_topLeftRadiusY != value)
+            {
+                _topLeftRadiusY = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
+
+    private int TopRightRadiusX
+    {
+        get => _topRightRadiusX;
+        set
+        {
+            if (_topRightRadiusX != value)
+            {
+                _topRightRadiusX = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
+
+    private int TopRightRadiusY
+    {
+        get => _topRightRadiusY;
+        set
+        {
+            if (_topRightRadiusY != value)
+            {
+                _topRightRadiusY = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
+
+    private int BottomLeftRadiusX
+    {
+        get => _bottomLeftRadiusX;
+        set
+        {
+            if (_bottomLeftRadiusX != value)
+            {
+                _bottomLeftRadiusX = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
+
+    private int BottomLeftRadiusY
+    {
+        get => _bottomLeftRadiusY;
+        set
+        {
+            if (_bottomLeftRadiusY != value)
+            {
+                _bottomLeftRadiusY = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
+
+    private int BottomRightRadiusX
+    {
+        get => _bottomRightRadiusX;
+        set
+        {
+            if (_bottomRightRadiusX != value)
+            {
+                _bottomRightRadiusX = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
+
+    private int BottomRightRadiusY
+    {
+        get => _bottomRightRadiusY;
+        set
+        {
+            if (_bottomRightRadiusY != value)
+            {
+                _bottomRightRadiusY = value;
+                UpdateShapeStyle();
+            }
+        }
+    }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        UpdateStyle();
+        UpdateShapeStyle();
     }
 
-    private void SetCssValue(string key, string value)
-    {
-        _cssStyles[key] = value;
-        UpdateStyle();
-    }
+    private void SetBorderRadiusStyle() => _cssStyles["border-radius"] = $"{TopLeftRadiusX}% {TopRightRadiusX}% {BottomRightRadiusX}% {BottomLeftRadiusX}% / {TopLeftRadiusY}% {TopRightRadiusY}% {BottomRightRadiusY}% {BottomLeftRadiusY}%";
 
-    private void UpdateStyle()
+    private void UpdateShapeStyle()
     {
-        _boxStyle = String.Join(";", _cssStyles.Select(kv => $"{kv.Key}:{kv.Value}"));
+        SetBorderRadiusStyle();
+        _shapeStyle = String.Join(";", _cssStyles.Select(kv => $"{kv.Key}:{kv.Value}"));
         StateHasChanged();
     }
 }
