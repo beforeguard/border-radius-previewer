@@ -150,11 +150,9 @@
         UpdateShapeStyle();
     }
 
-    private void SetBorderRadiusStyle() => _cssStyles["border-radius"] = $"{TopLeftRadiusX}% {TopRightRadiusX}% {BottomRightRadiusX}% {BottomLeftRadiusX}% / {TopLeftRadiusY}% {TopRightRadiusY}% {BottomRightRadiusY}% {BottomLeftRadiusY}%";
-
     private void UpdateShapeStyle()
     {
-        SetBorderRadiusStyle();
+        _cssStyles["border-radius"] = $"{TopLeftRadiusX}% {TopRightRadiusX}% {BottomRightRadiusX}% {BottomLeftRadiusX}% / {TopLeftRadiusY}% {TopRightRadiusY}% {BottomRightRadiusY}% {BottomLeftRadiusY}%";
         _shapeStyle = String.Join(";", _cssStyles.Select(kv => $"{kv.Key}:{kv.Value}"));
         StateHasChanged();
     }
